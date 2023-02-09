@@ -5,16 +5,44 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 
 bot.start((ctx) => {
   ctx.replyWithHTML(
-    `Здравствуйте ${ctx.from.username}! \n\nДобро пожаловать в наш бот
- \n\nВы всегда можете связаться с нами
- \n\n<b>Telegram</b> : @mone_cafe \n\n<b>Instagram</b> : @mone_cafe \n\n<b>Facebook</b> : @mone_cafe`,
+    `Здравствуйте <b>${ctx.from.username}</b>! \n\nДобро пожаловать в наш бот`,
     {
       reply_markup: {
-        keyboard: [["Меню", "Контакт"], ["Заказ"]],
+        keyboard: [["Меню", "Контакт"], ["Заказ", "Жалоба"], ["Предложения"]],
         resize_keyboard: true,
       },
     }
   );
+});
+
+bot.hears("Жалоба", (ctx) => {
+  ctx.reply("вы можете писать свои жалобы по этому адресу телеграм 👇", {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: "Telegram",
+            url: "https://t.me/mone_complaint_bot",
+          },
+        ],
+      ],
+    },
+  });
+});
+
+bot.hears("Предложения", (ctx) => {
+  ctx.reply("вы можете написать свои предложения на этот адрес телеграм 👇", {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: "Telegram",
+            url: "https://t.me/mone_suggestion_bot",
+          },
+        ],
+      ],
+    },
+  });
 });
 
 bot.hears("Контакт", (ctx) => {
@@ -24,7 +52,7 @@ bot.hears("Контакт", (ctx) => {
         [
           {
             text: "Telegram",
-            url: "https://t.me/uzbekistan",
+            url: "https://t.me/monecafebakery",
           },
           {
             text: "Адрес",
@@ -34,11 +62,11 @@ bot.hears("Контакт", (ctx) => {
         [
           {
             text: "Instagram",
-            url: "https://www.instagram.com/uzbekistan/",
+            url: "https://www.instagram.com/monebakery.uz/",
           },
           {
             text: "Facebook",
-            url: "https://www.facebook.com/uzbekistan/",
+            url: "https://www.facebook.com/MoneBakery.UZ",
           },
         ],
         [
@@ -133,7 +161,7 @@ bot.hears("Заказ", (ctx) => {
 bot.action("location", (ctx) => {
   // send our branches two location
   ctx.replyWithHTML(
-    "Вы можете посетить наши филиалы с 8:00 до 18:00. Все филиалы работают каждый день",
+    "Вы можете посетить наши филиалы с 7:00 до 23:00. Все филиалы работают каждый день",
     {
       reply_markup: {
         inline_keyboard: [
@@ -163,17 +191,17 @@ bot.action("location", (ctx) => {
 
 bot.action("branch1", (ctx) => {
   // send location of branch 1
-  ctx.replyWithLocation(41.311081, 69.240562);
+  ctx.replyWithLocation(39.673365, 66.969126);
 });
 
 bot.action("branch2", (ctx) => {
-  // send location of branch 2
-  ctx.replyWithLocation(41.311081, 69.240562);
+  // send location of branch 2 with link
+  ctx.replyWithLocation(39.644942, 66.951527);
 });
 
 bot.action("branch3", (ctx) => {
   // send location of branch 3
-  ctx.replyWithLocation(41.311081, 69.240562);
+  ctx.replyWithLocation(39.644823, 66.954632);
 });
 
 bot.action("menu", (ctx) => {
@@ -184,7 +212,7 @@ bot.action("menu", (ctx) => {
         [
           {
             text: "Канал",
-            url: "https://t.me/uzbekistan",
+            url: "https://t.me/monecafebakery",
           },
         ],
       ],
