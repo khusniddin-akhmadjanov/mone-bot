@@ -118,12 +118,7 @@ bot.hears("Меню", (ctx) => {
 bot.hears("Заказ", (ctx) => {
   // order with phone or telegram account
   ctx.replyWithHTML(
-    "Вы можете заказать в 👇: \n \nТелефон : 📞 <b>+998 98 888 00 55</b> \n\nMенеджер : <b>@Salesmanager_mone</b>",
-    {
-      reply_markup: {
-        inline_keyboard: categoryList,
-      },
-    }
+    "Вы можете заказать в 👇: \n \nТелефон : 📞 <b>+998 98 888 00 55</b> \n\nMенеджер : <b>@Salesmanager_mone</b>"
   );
 });
 
@@ -171,22 +166,6 @@ bot.action("branch2", (ctx) => {
 bot.action("branch3", (ctx) => {
   // send location of branch 3
   ctx.replyWithLocation(39.644823, 66.954632);
-});
-
-bot.action("menu", (ctx) => {
-  // go to telegram channel
-  ctx.replyWithHTML("Вы можете посмотреть наше меню в нашем канале 👇", {
-    reply_markup: {
-      inline_keyboard: [
-        [
-          {
-            text: "Канал",
-            url: "https://t.me/monecafebakery",
-          },
-        ],
-      ],
-    },
-  });
 });
 
 bot.launch();
