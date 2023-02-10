@@ -1,7 +1,9 @@
 const { Telegraf } = require("telegraf");
+const axios = require("axios");
 require("dotenv").config();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
+const backendApi = process.env.API;
 
 bot.start((ctx) => {
   ctx.replyWithHTML(
@@ -90,53 +92,27 @@ bot.hears("Назад", (ctx) => {
 });
 
 bot.hears("Меню", (ctx) => {
-  // reply with text and inline_keyboard categoriesKeyboard
-  ctx.reply("Вы можете увидеть все продукты через эти каналы 👇", {
-    reply_markup: {
-      inline_keyboard: [
-        [
+  // get category list from backend
+  axios
+    .get(`${backendApi}/category`)
+    .then((res) => {
+      const categoryList = res.data.map((category) => {
+        return [
           {
-            text: "Детские",
-            url: "https://t.me/mone_cake_kids",
+            text: category.parent,
+            url: category.url,
           },
-          {
-            text: "Юбилейные торжества",
-            url: "https://t.me/mone_cake_anniversary",
-          },
-        ],
-        [
-          {
-            text: "Для женщин",
-            url: "https://t.me/mone_cake_women",
-          },
-          {
-            text: "Для мужчин",
-            url: "https://t.me/mone_cake_man",
-          },
-        ],
-        [
-          {
-            text: "Свадебный",
-            url: "https://t.me/mone_cake_wedding",
-          },
-          {
-            text: "Канди торты",
-            url: "https://t.me/mone_cake_kandy",
-          },
-        ],
-        [
-          {
-            text: "День влюблённых",
-            url: "https://t.me/+Bhb9G8yUxcA1YmQy",
-          },
-          {
-            text: "Новогодние",
-            url: "https://t.me/+c6Aa4vDbWdxhMTBi",
-          },
-        ],
-      ],
-    },
-  });
+        ];
+      });
+      ctx.reply("Вы можете выбрать из категорий 👇", {
+        reply_markup: {
+          inline_keyboard: categoryList,
+        },
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 bot.hears("Заказ", (ctx) => {
@@ -145,14 +121,7 @@ bot.hears("Заказ", (ctx) => {
     "Вы можете заказать в 👇: \n \nТелефон : 📞 <b>+998 98 888 00 55</b> \n\nMенеджер : <b>@Salesmanager_mone</b>",
     {
       reply_markup: {
-        inline_keyboard: [
-          [
-            {
-              text: "Адрес",
-              callback_data: "location",
-            },
-          ],
-        ],
+        inline_keyboard: categoryList,
       },
     }
   );
