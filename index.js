@@ -10,14 +10,18 @@ bot.start((ctx) => {
     `Здравствуйте <b>${ctx.from.username}</b>! \n\nДобро пожаловать в наш бот`,
     {
       reply_markup: {
-        keyboard: [["Меню", "Контакт"], ["Заказ", "Жалоба"], ["Предложения"]],
+        keyboard: [
+          ["Меню", "Каталог"],
+          ["Заказ", "Контакт"],
+          ["Жалоба и Предложения"],
+        ],
         resize_keyboard: true,
       },
     }
   );
 });
 
-bot.hears("Меню", async (ctx) => {
+bot.hears("Каталог", async (ctx) => {
   try {
     await ctx.replyWithChatAction("typing");
     const res = await axios.get(`${backendApi}/category`);
@@ -47,6 +51,42 @@ bot.hears("Заказ", (ctx) => {
 });
 
 let lastMessage = ""; // store the user's previous message
+
+bot.hears("Жалоба и Предложения", async (ctx) => {
+  await ctx.reply(
+    "Вы можете отправить нам свои предложения и жалобы по ссылке ниже 👇",
+    {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: "Жалоба и Предложения",
+              url: "https://review.monebakery.uz/",
+            },
+          ],
+        ],
+      },
+    }
+  );
+});
+
+bot.hears("Меню", async (ctx) => {
+  await ctx.reply(
+    "Вы можете просмотреть все наши продукты, нажав на ссылку ниже 👇",
+    {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: "Меню",
+              url: "https://menu.monebakery.uz/",
+            },
+          ],
+        ],
+      },
+    }
+  );
+});
 
 bot.hears("Жалоба", (ctx) => {
   ctx.reply("Вы можете написать свою жалобу здесь");
