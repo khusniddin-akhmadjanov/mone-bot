@@ -7,13 +7,14 @@ const backendApi = process.env.API;
 
 bot.start((ctx) => {
   ctx.replyWithHTML(
-    `Здравствуйте <b>${ctx.from.username}</b>! \n\nДобро пожаловать в наш бот`,
+    `Здравствуйте <b>${ctx.from.username}</b>! \n\nДобро пожаловать в наш бот,`,
     {
       reply_markup: {
         keyboard: [
-          ["Меню", "Каталог"],
-          ["Заказ", "Контакт"],
+          ["Меню нашей кухни"],
+          ["Индивидуальные заказы тортов"],
           ["Жалоба и Предложения"],
+          ["Заказ", "Контакт"],
         ],
         resize_keyboard: true,
       },
@@ -21,7 +22,7 @@ bot.start((ctx) => {
   );
 });
 
-bot.hears("Каталог", async (ctx) => {
+bot.hears("Индивидуальные заказы тортов", async (ctx) => {
   try {
     await ctx.replyWithChatAction("typing");
     const res = await axios.get(`${backendApi}/category`);
@@ -46,14 +47,12 @@ bot.hears("Каталог", async (ctx) => {
 bot.hears("Заказ", (ctx) => {
   // order with phone or telegram account
   ctx.replyWithHTML(
-    "Вы можете заказать в 👇: \n \nТелефон : 📞 <b>+998 98 888 00 55</b> \n\nMенеджер : <b>@Salesmanager_mone</b>"
+    "Вы можете заказать в 👇: \n \nТелефон : 📞 <b>+998988880055</b> \n\nMенеджер : <b>@Salesmanager_mone</b>"
   );
 });
 
-let lastMessage = ""; // store the user's previous message
-
-bot.hears("Жалоба и Предложения", async (ctx) => {
-  await ctx.reply(
+bot.hears("Жалоба и Предложения", (ctx) => {
+  ctx.reply(
     "Вы можете отправить нам свои предложения и жалобы по ссылке ниже 👇",
     {
       reply_markup: {
@@ -70,15 +69,15 @@ bot.hears("Жалоба и Предложения", async (ctx) => {
   );
 });
 
-bot.hears("Меню", async (ctx) => {
-  await ctx.reply(
+bot.hears("Меню нашей кухни", (ctx) => {
+  ctx.reply(
     "Вы можете просмотреть все наши продукты, нажав на ссылку ниже 👇",
     {
       reply_markup: {
         inline_keyboard: [
           [
             {
-              text: "Меню",
+              text: "Меню нашей кухни",
               url: "https://menu.monebakery.uz/",
             },
           ],
@@ -88,18 +87,8 @@ bot.hears("Меню", async (ctx) => {
   );
 });
 
-bot.hears("Жалоба", (ctx) => {
-  ctx.reply("Вы можете написать свою жалобу здесь");
-  lastMessage = "Жалоба";
-});
-
-bot.hears("Предложения", (ctx) => {
-  ctx.reply("Вы можете написать свое предложение здесь");
-  lastMessage = "Предложения";
-});
-
-bot.hears("Контакт", async (ctx) => {
-  await ctx.reply("Вы всегда можете связаться с нами", {
+bot.hears("Контакт", (ctx) => {
+  ctx.reply("Вы всегда можете связаться с нами", {
     reply_markup: {
       inline_keyboard: [
         [
@@ -125,44 +114,12 @@ bot.hears("Контакт", async (ctx) => {
         [
           {
             text: "+998 98 888 00 55",
-            callback_data: "tel:+998 98 888 00 55",
+            callback_data: "call_me",
           },
         ],
       ],
     },
   });
-});
-
-bot.on("text", (ctx) => {
-  if (lastMessage === "Жалоба") {
-    // send the complaint to the admin panel via API
-    axios
-      .post(`${backendApi}/complaint/add`, {
-        username: ctx.from.username,
-        description: ctx.message.text,
-      })
-      .then(() => {
-        ctx.reply("Ваша жалоба отправлена");
-      })
-      .catch((err) => {
-        console.log(err);
-        ctx.reply("Ошибка при отправке жалобы");
-      });
-  } else if (lastMessage === "Предложения") {
-    // send the offer to the API
-    axios
-      .post(`${backendApi}/suggestion/add`, {
-        username: ctx.from.username,
-        suggestion: ctx.message.text,
-      })
-      .then(() => {
-        ctx.reply("Ваше предложение отправлено");
-      })
-      .catch((err) => {
-        console.log(err);
-        ctx.reply("Ошибка при отправке предложения");
-      });
-  }
 });
 
 bot.action("location", (ctx) => {
@@ -196,19 +153,23 @@ bot.action("location", (ctx) => {
   );
 });
 
+bot.action("call_me", (ctx) => {
+  ctx.reply("Наш контакт:  +998988880055");
+});
+
 bot.action("branch1", (ctx) => {
-  // send location of branch 1
   ctx.replyWithLocation(39.673365, 66.969126);
+  ctx.reply("Дахбет 25-А: +998988880055");
 });
 
 bot.action("branch2", (ctx) => {
-  // send location of branch 2 with link
   ctx.replyWithLocation(39.644942, 66.951527);
+  ctx.reply("Орзу Махмудова 12 дом: +998999990055");
 });
 
 bot.action("branch3", (ctx) => {
-  // send location of branch 3
   ctx.replyWithLocation(39.644823, 66.954632);
+  ctx.reply("Буюк Ипак йули 72 дом: +998944440055");
 });
 
 bot.launch();
