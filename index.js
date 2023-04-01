@@ -158,17 +158,17 @@ bot.action("call_me", (ctx) => {
 });
 
 bot.action("branch1", (ctx) => {
-  ctx.replyWithLocation(39.673365, 66.969126);
+  ctx.replyWithLocation(39.673304, 66.969116);
   ctx.reply("Дахбет 25-А: +998988880055");
 });
 
 bot.action("branch2", (ctx) => {
-  ctx.replyWithLocation(39.644942, 66.951527);
+  ctx.replyWithLocation(39.644842, 66.954546);
   ctx.reply("Орзу Махмудова 12 дом: +998999990055");
 });
 
 bot.action("branch3", (ctx) => {
-  ctx.replyWithLocation(39.644823, 66.954632);
+  ctx.replyWithLocation(39.652078, 66.923347);
   ctx.reply("Буюк Ипак йули 72 дом: +998944440055");
 });
 
